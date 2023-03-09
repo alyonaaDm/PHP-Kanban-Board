@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello BoardController!{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('board-edit.js', 'js') }}"></script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('board.css', 'css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="kanban-heading">
+            <a href="http://127.0.0.1:8000/board" class="kanban-heading-text--admin-edit">Board</a>
+            <strong class="kanban-heading-text">Edit Conditions</strong>
+        </div>
+        <div class="kanban-board" id="all-conditions">
+            {% for condition in conditions %}
+                <div class="kanban-block kanban-block-{{ loop.index }} {{ condition.name }}" id="{{ condition.name }}" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <strong>{{ condition.name }}</strong>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="kanban-board">
+            <div class="create-new-condition-block" id="create-new-task-block">
+                <strong>New Condition</strong>
+                <span class="form-row">
+                <label class="form-row-label" for="condition-name">Condition name</label>
+                <input class="form-row-input" type="text" name="condition-name" id="condition-name">
+                </span>
+                <span class="form-row-buttons">
+                <button id="save-button" onclick="saveCondition()">Save</button>
+            </span>
+            </div>
+        </div>
+        </div>
+    </div>
+{% endblock %}

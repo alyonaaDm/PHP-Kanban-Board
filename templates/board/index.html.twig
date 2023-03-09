@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello BoardController!{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('board.js', 'js') }}"></script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('board.css', 'css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="kanban-heading">
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="http://127.0.0.1:8000/board/edit" class="kanban-heading-text--admin-edit">Edit conditions</a>
+        {% endif %}
+        <strong class="kanban-heading-text">Kanban Board</strong>
+    </div>
+    <div class="kanban-board">
+        {% for condition in conditions %}
+            <div class="kanban-block kanban-block-{{ loop.index }} {{ condition.name }}" id="{{ condition.name }}" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <strong>{{ condition.name }}</strong>
+                {% if loop.first %}
+                    <div class="task-button-block">
+                        <button id="task-button" onclick="createTask()">Create new task</button>
+                    </div>
+                {% endif %}
+                {% if tasks[condition.id] is defined %}
+                    {% for task in tasks[condition.id] %}
+                        <div class="task" id="task-{{ task.id }}" draggable="true" ondragstart="drag(event)" onclick="remove({{ task.id }}, '{{ task.name }}')">
+                            <span>{{ task.name }}</span>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        {% endfor %}
+        <div class="create-new-task-block" id="create-new-task-block">
+            <strong>New Task</strong>
+            <span class="form-row">
+                <label class="form-row-label" for="task-name">Task</label>
+                <input class="form-row-input" type="text" name="task-name" id="task-name">
+            </span>
+            <span class="form-row">
+                <label class="form-row-label" for="task-name">Description</label>
+                <textarea class="form-row-input" name="task-description" id="task-description" cols="70" rows="10"></textarea>
+            </span>
+            <span class="form-row">
+                <label class="form-row-label" for="task-name">Urgency</label>
+                <select class="form-row-input" name="task-urgency" id="task-urgency">
+                    <option value="low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                </select>
+            </span>
+            <span class="form-row">
+                <label class="form-row-label" for="task-deadline">Deadline:</label>
+{#                TODO: Make min data from current data #}
+                <input class="form-row-input" type="date" id="task-deadline" name="task-deadline" min="2022-12-07" max="2050-01-01">
+            </span>
+            <span class="form-row-buttons">
+                <button id="edit-button" onclick="editTask()">Edit</button>
+                <button id="save-button" onclick="saveTask()">Save</button>
+                <button id="cancel-button" onclick="createTask()">Cancel</button>
+            </span>
+        </div>
+    </div>
+</div>
+{% endblock %}

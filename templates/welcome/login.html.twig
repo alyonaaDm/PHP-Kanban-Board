@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="icon" href="http://vladmaxi.net/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="http://vladmaxi.net/favicon.ico" type="image/x-icon">
+</head>
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('auth.css', 'css') }}">
+{% endblock %}
+<body>
+
+<div class="welcome-top">
+	<span class="right">
+        <a href="http://127.0.0.1:8000/welcome/registation-page">
+                <strong>Регистрация</strong>
+            </a>
+        </span>
+    <div class="clr"></div>
+</div>
+{% if error.messageKey is defined %}
+    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+{% endif %}
+<form action="{{ path('app_welcome') }}" method="post" id="form" name="form">
+    <div id="block">
+        <label id="user" for="name">@</label>
+        <input type="text" name="_username" id="name" placeholder="Логин" value="{{ last_username|default('') }}"/>
+        <label id="pass" for="password">*</label>
+        <input type="password" name="_password" id="password" placeholder="Пароль"  />
+        <input type="submit" id="submit" name="submit" value="➟"/>
+    </div>
+</form>
+<div id="option">
+    <p>Авторизация</p>
+</div>
+</body>
+</html>
